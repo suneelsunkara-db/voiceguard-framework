@@ -1,0 +1,24 @@
+{
+  "comment": "VoiceGuard external provider; credential supplied by deployment secret injection",
+  "config": {
+    "provider_type": "EXTERNAL_MODEL_PROVIDER_TYPE_CUSTOM",
+    "allow_all_targets": false,
+    "forward_headers": false,
+    "forward_query_parameters": false,
+    "forward_unmanaged_paths": false,
+    "targets": [
+      {
+        "model": "voiceguard-v1",
+        "native_api_types": ["openai/v1/chat/completions"]
+      }
+    ],
+    "custom": {
+      "direct": {
+        "base_url": "${VOICEGUARD_ORIGIN}/v1/chat/completions",
+        "api_key": {
+          "plaintext": "${VOICEGUARD_PROVIDER_API_KEY}"
+        }
+      }
+    }
+  }
+}

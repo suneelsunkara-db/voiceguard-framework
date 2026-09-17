@@ -1,0 +1,43 @@
+[project]
+name = "voiceguard-framework"
+version = "0.1.0"
+description = "Fail-closed, audio-native guardrail service for governed AI gateways"
+requires-python = ">=3.11"
+dependencies = [
+  "databricks-sdk>=0.102.0",
+  "fastapi>=0.116,<0.117",
+  "psycopg[binary]>=3.2,<4",
+  "pydantic>=2.11,<3",
+  "pyyaml>=6,<7",
+  "requests>=2.32,<3",
+  "uvicorn[standard]>=0.35,<1",
+]
+
+[project.optional-dependencies]
+dev = [
+  "httpx>=0.28,<1",
+  "pip-audit>=2.9,<3",
+  "pytest>=8,<10",
+  "ruff>=0.12,<1",
+]
+
+[project.scripts]
+voiceguard = "voiceguard.api:run"
+
+[build-system]
+requires = ["setuptools>=80"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM", "RUF"]

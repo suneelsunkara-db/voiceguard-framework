@@ -1,0 +1,28 @@
+{
+  "comment": "Governed VoiceGuard route. No fallback and no raw-payload inference table.",
+  "config": {
+    "routing": {
+      "destinations": [
+        {
+          "name": "voiceguard-primary",
+          "destination_type": "DESTINATION_TYPE_EXTERNAL_FOUNDATION_MODEL",
+          "traffic_percentage": 100,
+          "external_model_config": {
+            "model_provider_service": "model-provider-services/${CATALOG}.${SCHEMA}.${PROVIDER_SERVICE}",
+            "target": {
+              "model": "voiceguard-v1",
+              "native_api_types": ["openai/v1/chat/completions"]
+            }
+          }
+        }
+      ]
+    },
+    "rate_limits": [
+      {
+        "key": "RATE_LIMIT_KEY_SERVICE",
+        "renewal_period": "RATE_LIMIT_RENEWAL_PERIOD_MINUTE",
+        "requests": 60
+      }
+    ]
+  }
+}

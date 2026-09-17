@@ -1,0 +1,32 @@
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.11"
+          enable-cache: true
+      - run: uv sync --frozen --extra dev
+      - run: uv run ruff check .
+      - run: uv run pytest -q
+      - run: uv run pip-audit
+      - run: uv build
+      - run: uv export --frozen --no-dev --format cyclonedx1.5 --output-file dist/voiceguard.cdx.json
+      - run: shasum -a 256 dist/*
+      - uses: actions/upload-artifact@v4
+        with:
+          name: voiceguard-runtime-artifacts
+          path: dist/
+          if-no-files-found: error
