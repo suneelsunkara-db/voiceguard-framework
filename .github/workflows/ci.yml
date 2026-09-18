@@ -18,10 +18,6 @@ jobs:
         with:
           python-version: "3.11"
           enable-cache: true
-      # Bootstrap one public lock after the dependency security upgrade. The
-      # generated lock is uploaded with the release artifacts and then committed;
-      # normal CI returns to frozen-lock operation.
-      - run: rm uv.lock && uv lock --default-index https://pypi.org/simple
       - run: uv sync --frozen --all-packages --extra dev --default-index https://pypi.org/simple
       - run: uv run ruff check .
       - run: uv run pytest -q
