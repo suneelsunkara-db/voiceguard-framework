@@ -6,8 +6,9 @@ Docker requirement. Select an approved runtime and satisfy this contract.
 
 ## Process
 
-Install the exact versions in `uv.lock`, build the wheel with `uv build`, and
-run:
+Install the exact versions in `uv.lock`, build all packages with
+`uv build --all-packages`, install `voiceguard-server` and `voiceguard-core`,
+and run:
 
 ```bash
 voiceguard
@@ -27,10 +28,10 @@ render secrets into source, deployment logs, or shell history.
 
 - The Gateway provider key is stored only as SHA-256 hashes in
   `VOICEGUARD_TENANTS`.
-- Databricks OAuth M2M credentials invoke the current app's Qwen STT, governed
-  Qwen Model Service, and Lakebase OAuth credential API.
-- The runtime receives a reviewed copy of the current app's `config.yaml`; it
-  does not invent parallel resource names.
+- Dedicated Databricks OAuth M2M credentials invoke only the configured Qwen
+  STT, governed evaluator Model Service, and Lakebase OAuth credential API.
+- `VOICEGUARD_CONFIG` points to the reviewed VoiceGuard-owned
+  `config/voiceguard.yaml`.
 
 ## Network policy
 
@@ -53,7 +54,9 @@ No other egress is permitted.
 Deploy the wheel generated from the reviewed commit, verify its SHA-256 against
 the CI artifact, and retain:
 
-- `voiceguard_framework-<version>-py3-none-any.whl`
+- `voiceguard_core-<version>-py3-none-any.whl`
+- `voiceguard_server-<version>-py3-none-any.whl`
+- `voiceguard_client-<version>-py3-none-any.whl`
 - `voiceguard.cdx.json`
 - vulnerability report
 - runtime signature / provenance
@@ -62,9 +65,25 @@ the CI artifact, and retain:
 The runtime must use Python 3.11. Health checks must call `/ready`; process
 liveness alone is not sufficient for traffic admission.
 
+## Lakebase migration
+
+Run schema migration as an owner/deployer before starting the runtime:
+
+```bash
+python deploy/lakebase/migrate.py \
+  --config config/voiceguard.yaml \
+  --profile fe-vm-vdm-classic-rcn6ip \
+  --runtime-principal '<voiceguard-service-principal-client-id>'
+```
+
+The runtime principal receives `CONNECT`, schema `USAGE`, and table
+`SELECT`/`INSERT` only. The server validates the tables at startup and does not
+perform DDL.
+
 ## Missing deployment input
 
 No approved independent origin platform or URL is configured in this
 repository. Live deployment must not proceed until its owner supplies them.
-STT, semantic evaluation, nonce storage, and the metadata ledger reuse the
-resources already configured in the current app.
+Configured STT, semantic evaluation, and Lakebase may reference approved shared
+infrastructure, but VoiceGuard uses its own identity, configuration, schema, and
+tables.

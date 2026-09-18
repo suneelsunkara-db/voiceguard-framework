@@ -9,8 +9,7 @@ from datetime import datetime
 from typing import Any
 
 from databricks.sdk import WorkspaceClient
-
-from voiceguard.contracts import Decision
+from voiceguard_core.contracts import Decision
 
 _IDENTIFIER = re.compile(r"[A-Za-z_][A-Za-z0-9_]{0,62}")
 
@@ -131,7 +130,7 @@ class LakebaseConnectionFactory:
 
 
 class LakebaseDecisionStore:
-    """Atomic nonce claim and metadata-only ledger on the app's Lakebase."""
+    """Atomic nonce claim and metadata-only ledger on configured Lakebase."""
 
     def __init__(
         self,
@@ -140,11 +139,13 @@ class LakebaseDecisionStore:
         schema: str,
     ) -> None:
         self.connection_factory = connection_factory
+        self.schema_name = schema
         self.schema = _identifier(schema)
         self.nonce_table = f"{self.schema}.voiceguard_nonces"
         self.decision_table = f"{self.schema}.voiceguard_decisions"
 
     def ensure_schema(self) -> None:
+        """Deployment migration; do not grant runtime identities schema CREATE."""
         with self.connection_factory.connect() as connection, connection.cursor() as cursor:
             cursor.execute(f"CREATE SCHEMA IF NOT EXISTS {self.schema}")
             cursor.execute(
@@ -179,6 +180,20 @@ class LakebaseDecisionStore:
                 )
                 """
             )
+
+    def validate_schema(self) -> None:
+        """Fail startup unless deployment migrations created both required tables."""
+        with self.connection_factory.connect() as connection, connection.cursor() as cursor:
+            cursor.execute(
+                "SELECT to_regclass(%s), to_regclass(%s)",
+                (
+                    f"{self.schema_name}.voiceguard_nonces",
+                    f"{self.schema_name}.voiceguard_decisions",
+                ),
+            )
+            row = cursor.fetchone()
+            if not row or len(row) != 2 or row[0] is None or row[1] is None:
+                raise RuntimeError("VoiceGuard Lakebase schema migration is missing")
 
     def claim(self, *, tenant_id: str, nonce: str, expires_at: datetime) -> bool:
         with self.connection_factory.connect() as connection, connection.cursor() as cursor:

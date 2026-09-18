@@ -9,8 +9,7 @@ from typing import Any
 
 import requests
 from databricks.sdk import WorkspaceClient
-
-from voiceguard.contracts import CanonicalAudio, Transcript
+from voiceguard_core.contracts import CanonicalAudio, Transcript
 
 
 class DatabricksResponsesTranscriber:

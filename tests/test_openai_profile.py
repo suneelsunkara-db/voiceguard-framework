@@ -3,8 +3,7 @@ from __future__ import annotations
 import json
 
 import pytest
-
-from voiceguard.openai_profile import parse_request, strict_json
+from voiceguard_core.openai_profile import parse_request, strict_json
 
 
 def request() -> dict:

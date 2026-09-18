@@ -6,17 +6,17 @@ from datetime import UTC, datetime, timedelta
 from types import SimpleNamespace
 
 import pytest
-
-from voiceguard.adapters.databricks import DatabricksResponsesTranscriber
-from voiceguard.adapters.databricks_semantic import DatabricksGatewaySemanticEvaluator
-from voiceguard.adapters.lakebase import LakebaseDecisionStore
-from voiceguard.contracts import (
+from voiceguard_core.contracts import (
     CanonicalAudio,
     Decision,
     Outcome,
     ReasonCode,
     Transcript,
 )
+
+from voiceguard.adapters.databricks import DatabricksResponsesTranscriber
+from voiceguard.adapters.databricks_semantic import DatabricksGatewaySemanticEvaluator
+from voiceguard.adapters.lakebase import LakebaseDecisionStore
 
 
 class Response:
@@ -174,7 +174,7 @@ def test_semantic_adapter_requires_exact_shape_and_model_version() -> None:
 
 def test_lakebase_store_uses_atomic_nonce_and_metadata_only_decisions() -> None:
     factory = ConnectionFactory()
-    store = LakebaseDecisionStore(factory, schema="genie_voice_contact_center")
+    store = LakebaseDecisionStore(factory, schema="voiceguard")
     claimed = store.claim(
         tenant_id="tenant-a",
         nonce="nonce_123456",

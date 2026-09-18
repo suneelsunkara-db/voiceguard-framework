@@ -3,9 +3,17 @@
 VoiceGuard is an independent, fail-closed service for evaluating completed voice
 utterances before an application consumes their transcript.
 
-It is not part of Genie Voice Agent. The framework has its own API, runtime,
-credentials, policy lifecycle, replay store, audit sink, deployment, and tests.
-Applications integrate through a governed AI Gateway Model Service.
+It is not part of Genie Voice Agent. The repository publishes three packages:
+
+- `voiceguard-core`: dependency-free contracts, audio boundary, policies, and
+  fail-closed engine.
+- `voiceguard-client`: dependency-free request builder and response validator
+  for applications.
+- `voiceguard-server`: independently deployed HTTPS provider and Databricks /
+  Lakebase adapters.
+
+Applications install only `voiceguard-client` and integrate through a governed
+AI Gateway Model Service.
 
 ## Non-negotiable design rules
 
@@ -13,8 +21,8 @@ These are frozen v1 invariants (`docs/adr/0002-locked-v1-invariants.md`).
 They are not optional, not feature-flagged, and not traded for vendor parity
 (streaming, fail-open fallbacks, remote audio URLs, or mixed app credentials).
 
-- No runtime import or deployment hook into an application repository. The
-  deployer materializes the same reviewed `config.yaml` used by the current app.
+- No runtime import, configuration load, or deployment hook into an application
+  repository. VoiceGuard owns `config/voiceguard.yaml`.
 - No direct application access to the provider origin, Model Provider Service,
   STT endpoint, semantic evaluator, or audit backend.
 - No unmanaged Gateway passthrough or fallback destination.
@@ -46,9 +54,9 @@ VoiceGuard HTTPS service
   └── metadata-only Lakebase decision ledger
 ```
 
-The core package depends only on framework contracts. The production adapters
-reuse the current app's Databricks OAuth, Qwen STT, governed Qwen Model Service,
-and Lakebase/Postgres configuration.
+The core and client packages have no runtime dependencies. The server references
+approved Qwen STT, governed Model Service, and Lakebase resources through its own
+configuration and dedicated service-principal grants.
 
 ## Enforcement behavior
 
@@ -103,13 +111,13 @@ auto-detects, and a mismatch is denied.
 
 ## Runtime configuration
 
-Copy `.env.example` into your secret manager. Do not put plaintext credentials
-in source control.
+Deploy `config/voiceguard.yaml` as VoiceGuard-owned non-secret configuration and
+inject `.env.example` values from the secret manager.
 
 The service intentionally refuses to start without:
 
 - Provider API-key hashes and a release-approved language allowlist.
-- The current app's reviewed deployment config plus Databricks OAuth M2M.
+- VoiceGuard-owned configuration plus dedicated Databricks OAuth M2M.
 - The configured Qwen STT endpoint and governed Qwen Model Service.
 - The configured Lakebase project, database, and schema for atomic nonces and
   metadata-only decisions.
@@ -155,9 +163,7 @@ An unsupported or unevaluated language must not be placed in
 ## Development
 
 ```bash
-python -m venv .venv
-. .venv/bin/activate
-pip install -e '.[dev]'
-pytest
-ruff check .
+uv sync --all-packages --extra dev
+uv run pytest
+uv run ruff check .
 ```

@@ -1,4 +1,4 @@
-"""Semantic evaluator using the current app's governed AI Gateway Model Service."""
+"""Semantic evaluator using a configured governed AI Gateway Model Service."""
 
 from __future__ import annotations
 
@@ -9,8 +9,7 @@ from typing import Any
 
 import requests
 from databricks.sdk import WorkspaceClient
-
-from voiceguard.contracts import SemanticAssessment, Transcript
+from voiceguard_core.contracts import SemanticAssessment, Transcript
 
 
 class DatabricksGatewaySemanticEvaluator:

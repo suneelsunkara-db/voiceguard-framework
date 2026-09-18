@@ -1,6 +1,5 @@
-"""VoiceGuard framework."""
+"""Deployable VoiceGuard server package."""
 
-from voiceguard.contracts import Decision, Outcome
-from voiceguard.engine import VoiceGuardEngine
+from voiceguard_core import Decision, Outcome, VoiceGuardEngine
 
 __all__ = ["Decision", "Outcome", "VoiceGuardEngine"]

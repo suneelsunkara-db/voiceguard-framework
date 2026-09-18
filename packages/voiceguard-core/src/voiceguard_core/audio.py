@@ -10,7 +10,7 @@ import struct
 import wave
 from dataclasses import dataclass
 
-from voiceguard.contracts import CanonicalAudio
+from voiceguard_core.contracts import CanonicalAudio
 
 
 class AudioRejected(ValueError):

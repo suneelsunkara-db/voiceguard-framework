@@ -42,7 +42,7 @@ That second hop cannot skip VoiceGuard.
 | Control | Gateway slot | Owner | Language gate |
 |---|---|---|---|
 | Completed utterance, PCM16 WAV, no streaming | VoiceGuard origin parser | VoiceGuard | n/a |
-| Replay nonce | VoiceGuard + current-app Lakebase | VoiceGuard | n/a |
+| Replay nonce | VoiceGuard-owned schema on approved Lakebase | VoiceGuard | n/a |
 | ASR language allowlist | VoiceGuard engine | VoiceGuard | Release-approved tags only |
 | Payment-card identifiers | VoiceGuard deterministic policy | VoiceGuard | Digit/Luhn; locale packs at certification |
 | Semantic unsafe / injection on speech | VoiceGuard version-pinned evaluator | VoiceGuard | Certified languages only |

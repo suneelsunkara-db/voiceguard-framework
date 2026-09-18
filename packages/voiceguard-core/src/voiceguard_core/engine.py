@@ -7,7 +7,7 @@ import unicodedata
 from collections.abc import Iterable
 from datetime import UTC, datetime, timedelta
 
-from voiceguard.contracts import (
+from voiceguard_core.contracts import (
     CanonicalAudio,
     Decision,
     DecisionLedger,

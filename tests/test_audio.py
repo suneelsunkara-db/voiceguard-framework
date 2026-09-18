@@ -6,8 +6,7 @@ import struct
 import wave
 
 import pytest
-
-from voiceguard.audio import AudioLimits, AudioRejected, WavPcm16Normalizer
+from voiceguard_core.audio import AudioLimits, AudioRejected, WavPcm16Normalizer
 
 
 def wav(*, seconds: float = 0.2, channels: int = 1, rate: int = 16_000) -> bytes:

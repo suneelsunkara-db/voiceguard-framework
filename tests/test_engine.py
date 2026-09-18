@@ -3,8 +3,7 @@ from __future__ import annotations
 from datetime import UTC, datetime
 
 import pytest
-
-from voiceguard.contracts import (
+from voiceguard_core.contracts import (
     CanonicalAudio,
     EvaluationContext,
     Finding,
@@ -12,7 +11,7 @@ from voiceguard.contracts import (
     ReasonCode,
     Transcript,
 )
-from voiceguard.engine import VoiceGuardEngine
+from voiceguard_core.engine import VoiceGuardEngine
 
 
 class Transcriber:

@@ -2,14 +2,14 @@ from __future__ import annotations
 
 from datetime import UTC, datetime
 
-from voiceguard.contracts import (
+from voiceguard_core.contracts import (
     CanonicalAudio,
     EvaluationContext,
     Outcome,
     SemanticAssessment,
     Transcript,
 )
-from voiceguard.policies import PaymentCardPolicy, RequiredSemanticPolicy
+from voiceguard_core.policies import PaymentCardPolicy, RequiredSemanticPolicy
 
 
 class Evaluator:

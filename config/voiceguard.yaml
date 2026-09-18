@@ -1,0 +1,28 @@
+schema_version: voiceguard/config/v1
+
+runtime:
+  hosting_target: independent-https
+  provider_auth: rotatable-api-key
+
+# Approved resource references. VoiceGuard owns this configuration; it does not
+# import Genie configuration or infer resources from another repository.
+databricks:
+  stt_endpoint: realtime_voice_stt_qwen3_asr_1_7b
+  semantic_model_service: partner_demo_catalog.genie_voice_contact_center.genie_voice_qwen_guarded
+  semantic_model_version: system.ai.qwen3-next-80b-a3b-instruct
+
+# Reuse the approved Lakebase project/database, but isolate VoiceGuard state in
+# a dedicated schema and grant only that schema to the VoiceGuard principal.
+lakebase:
+  instance: genie_voice_lakebase
+  database: databricks_postgres
+  port: 5432
+  schema: voiceguard
+
+release:
+  policy_version: unreleased
+  supported_languages: [en]
+  semantic_allow_threshold: 0.99
+
+server:
+  max_request_bytes: 4000000

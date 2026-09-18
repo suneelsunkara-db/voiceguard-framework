@@ -16,7 +16,7 @@ application deployment script.
 4. The matching SHA-256 digest is present in the server-side tenant profile.
 5. VoiceGuard's OAuth M2M service principal can query only the configured Qwen
    STT endpoint and Qwen Model Service, and can access only VoiceGuard's
-   Lakebase tables in the current app schema.
+   dedicated Lakebase schema and tables.
 6. The application principal has no access to the origin, Provider Service, STT,
    Qwen evaluator service, or VoiceGuard Lakebase tables.
 

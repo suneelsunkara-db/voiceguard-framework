@@ -1,10 +1,10 @@
-"""Reusable policies. Semantic coverage is delegated to a versioned evaluator."""
+"""Reusable dependency-free policies."""
 
 from __future__ import annotations
 
 import re
 
-from voiceguard.contracts import (
+from voiceguard_core.contracts import (
     CanonicalAudio,
     EvaluationContext,
     Finding,

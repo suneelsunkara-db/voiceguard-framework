@@ -1,16 +1,16 @@
 [project]
-name = "voiceguard-framework"
+name = "voiceguard-server"
 version = "0.1.0"
-description = "Fail-closed, audio-native guardrail service for governed AI gateways"
+description = "Deployable VoiceGuard HTTPS provider and Databricks adapters"
 requires-python = ">=3.11"
 dependencies = [
   "databricks-sdk>=0.102.0",
   "fastapi>=0.116,<0.117",
   "psycopg[binary]>=3.2,<4",
-  "pydantic>=2.11,<3",
   "pyyaml>=6,<7",
   "requests>=2.32,<3",
   "uvicorn[standard]>=0.35,<1",
+  "voiceguard-core==0.1.0",
 ]
 
 [project.optional-dependencies]
@@ -28,11 +28,28 @@ voiceguard = "voiceguard.api:run"
 requires = ["setuptools>=80"]
 build-backend = "setuptools.build_meta"
 
+# This repository is public. Pin public PyPI so CI and local installs do not
+# inherit a Databricks-only package proxy from the operator's uv.toml.
+[[tool.uv.index]]
+name = "pypi"
+url = "https://pypi.org/simple"
+default = true
+
+[tool.uv.workspace]
+members = ["packages/*"]
+
+[tool.uv.sources]
+voiceguard-core = { workspace = true }
+
 [tool.setuptools.packages.find]
 where = ["src"]
 
 [tool.pytest.ini_options]
-pythonpath = ["src"]
+pythonpath = [
+  "src",
+  "packages/voiceguard-core/src",
+  "packages/voiceguard-client/src",
+]
 testpaths = ["tests"]
 
 [tool.ruff]

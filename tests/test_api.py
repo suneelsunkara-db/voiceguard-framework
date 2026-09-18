@@ -5,10 +5,10 @@ import json
 from datetime import UTC, datetime, timedelta
 
 from fastapi.testclient import TestClient
+from voiceguard_core.contracts import CanonicalAudio, Decision, Outcome, ReasonCode
 
 from voiceguard.api import create_app
 from voiceguard.config import Settings, TenantProfile
-from voiceguard.contracts import CanonicalAudio, Decision, Outcome, ReasonCode
 from voiceguard.readiness import Readiness
 
 
@@ -71,8 +71,10 @@ def settings() -> Settings:
         lakebase_instance="genie_voice_lakebase",
         lakebase_database="databricks_postgres",
         lakebase_port=5432,
-        lakebase_schema="genie_voice_contact_center",
+        lakebase_schema="voiceguard",
         max_request_bytes=4_000_000,
+        hosting_target="independent-https",
+        provider_auth="rotatable-api-key",
     )
 
 

@@ -1,0 +1,14 @@
+[project]
+name = "voiceguard-core"
+version = "0.1.0"
+description = "Dependency-free contracts and fail-closed VoiceGuard engine"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = []
+
+[build-system]
+requires = ["setuptools>=80"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]

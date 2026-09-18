@@ -11,6 +11,11 @@ import uvicorn
 from databricks.sdk import WorkspaceClient
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
+from voiceguard_core.audio import AudioRejected, WavPcm16Normalizer
+from voiceguard_core.contracts import Decision, EvaluationContext, Outcome
+from voiceguard_core.engine import VoiceGuardEngine
+from voiceguard_core.openai_profile import MODEL, parse_request
+from voiceguard_core.policies import PaymentCardPolicy, RequiredSemanticPolicy
 
 from voiceguard.adapters.databricks import DatabricksResponsesTranscriber
 from voiceguard.adapters.databricks_semantic import DatabricksGatewaySemanticEvaluator
@@ -18,12 +23,7 @@ from voiceguard.adapters.lakebase import (
     LakebaseConnectionFactory,
     LakebaseDecisionStore,
 )
-from voiceguard.audio import AudioRejected, WavPcm16Normalizer
 from voiceguard.config import Settings, TenantProfile
-from voiceguard.contracts import Decision, EvaluationContext, Outcome
-from voiceguard.engine import VoiceGuardEngine
-from voiceguard.openai_profile import MODEL, parse_request
-from voiceguard.policies import PaymentCardPolicy, RequiredSemanticPolicy
 from voiceguard.readiness import Readiness
 
 
@@ -55,7 +55,7 @@ def create_app(
             ),
             schema=settings.lakebase_schema,
         )
-        decision_store.ensure_schema()
+        decision_store.validate_schema()
         active_engine = VoiceGuardEngine(
             transcriber=transcriber,
             policies=(
