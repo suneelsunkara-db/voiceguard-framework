@@ -26,7 +26,7 @@ jobs:
       - run: uv export --frozen --package voiceguard-server --no-dev --format cyclonedx1.5 --output-file dist/voiceguard.cdx.json
       - run: cp config/voiceguard.yaml dist/voiceguard.yaml
       - run: cp uv.lock dist/uv.lock
-      - run: shasum -a 256 dist/*
+      - run: (cd dist && shasum -a 256 * > SHA256SUMS)
       - uses: actions/upload-artifact@v4
         with:
           name: voiceguard-runtime-artifacts
