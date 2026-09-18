@@ -1,6 +1,6 @@
 [project]
 name = "voiceguard-server"
-version = "0.1.0"
+version = "0.1.1"
 description = "Deployable VoiceGuard HTTPS provider and Databricks adapters"
 requires-python = ">=3.11"
 dependencies = [
@@ -10,7 +10,7 @@ dependencies = [
   "pyyaml>=6,<7",
   "requests>=2.32,<3",
   "uvicorn[standard]>=0.35,<1",
-  "voiceguard-core==0.1.0",
+  "voiceguard-core==0.1.1",
 ]
 
 [project.optional-dependencies]

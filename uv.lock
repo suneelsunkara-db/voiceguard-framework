@@ -1365,17 +1365,17 @@ wheels = [
 
 [[package]]
 name = "voiceguard-client"
-version = "0.1.0"
+version = "0.1.1"
 source = { editable = "packages/voiceguard-client" }
 
 [[package]]
 name = "voiceguard-core"
-version = "0.1.0"
+version = "0.1.1"
 source = { editable = "packages/voiceguard-core" }
 
 [[package]]
 name = "voiceguard-server"
-version = "0.1.0"
+version = "0.1.1"
 source = { editable = "." }
 dependencies = [
     { name = "databricks-sdk" },

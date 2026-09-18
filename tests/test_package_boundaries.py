@@ -20,5 +20,5 @@ def test_core_and_client_have_no_runtime_dependencies() -> None:
 def test_server_depends_on_version_matched_core_only() -> None:
     server = _project("pyproject.toml")
     assert server["name"] == "voiceguard-server"
-    assert "voiceguard-core==0.1.0" in server["dependencies"]
+    assert "voiceguard-core==0.1.1" in server["dependencies"]
     assert all("voiceguard-client" not in item for item in server["dependencies"])

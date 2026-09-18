@@ -80,6 +80,22 @@ The runtime principal receives `CONNECT`, schema `USAGE`, and table
 `SELECT`/`INSERT` only. The server validates the tables at startup and does not
 perform DDL.
 
+## Production preflight
+
+From the exact runtime environment, after migration and before opening traffic:
+
+```bash
+python tools/preflight.py \
+  --config /etc/voiceguard/voiceguard.yaml \
+  --output /var/lib/voiceguard/preflight.json
+```
+
+This validates the release policy version, the authenticated M2M service
+principal, Qwen STT readiness, the pinned semantic Model Service route, and both
+Lakebase tables. It runs every check and exits non-zero if any check fails. The
+report contains exception types only and does not expose credentials or provider
+responses.
+
 ## Missing deployment input
 
 No approved independent origin platform or URL is configured in this

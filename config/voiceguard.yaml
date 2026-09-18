@@ -20,7 +20,7 @@ lakebase:
   schema: voiceguard
 
 release:
-  policy_version: unreleased
+  policy_version: voiceguard-0.1.1
   supported_languages: [en]
   semantic_allow_threshold: 0.99
 

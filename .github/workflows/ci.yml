@@ -23,6 +23,7 @@ jobs:
       - run: uv run pytest -q
       - run: uv run pip-audit --skip-editable
       - run: uv build --all-packages
+      - run: uv run python tools/validate_wheels.py dist
       - run: uv export --frozen --package voiceguard-server --no-dev --format cyclonedx1.5 --output-file dist/voiceguard.cdx.json
       - run: cp config/voiceguard.yaml dist/voiceguard.yaml
       - run: cp uv.lock dist/uv.lock
