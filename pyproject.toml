@@ -5,7 +5,7 @@ description = "Deployable VoiceGuard HTTPS provider and Databricks adapters"
 requires-python = ">=3.11"
 dependencies = [
   "databricks-sdk>=0.102.0",
-  "fastapi>=0.116,<0.117",
+  "fastapi>=0.116,<1",
   "psycopg[binary]>=3.2,<4",
   "pyyaml>=6,<7",
   "requests>=2.32,<3",
