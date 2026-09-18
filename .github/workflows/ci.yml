@@ -18,6 +18,10 @@ jobs:
         with:
           python-version: "3.11"
           enable-cache: true
+      # Bootstrap one public lock after the dependency security upgrade. The
+      # generated lock is uploaded with the release artifacts and then committed;
+      # normal CI returns to frozen-lock operation.
+      - run: rm uv.lock && uv lock --default-index https://pypi.org/simple
       - run: uv sync --frozen --all-packages --extra dev --default-index https://pypi.org/simple
       - run: uv run ruff check .
       - run: uv run pytest -q
@@ -25,6 +29,7 @@ jobs:
       - run: uv build --all-packages
       - run: uv export --frozen --package voiceguard-server --no-dev --format cyclonedx1.5 --output-file dist/voiceguard.cdx.json
       - run: cp config/voiceguard.yaml dist/voiceguard.yaml
+      - run: cp uv.lock dist/uv.lock
       - run: shasum -a 256 dist/*
       - uses: actions/upload-artifact@v4
         with:
